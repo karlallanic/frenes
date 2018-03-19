@@ -1,0 +1,55 @@
+<html>
+	<head>
+		<title>pindex.html</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/frenes2.css">
+		<style type="text/css">
+
+.playzone{
+	background-image:url("fr.jpg");
+}
+		</style>
+	</head>
+	<body>
+		<div class='container'>
+			<div class='row'>
+						
+				<div class='col-xs-2 col-xs-offset-2 playzone'>
+				<h1 class='text-center Beginner'>  French To English Typing Game </h1>
+					<div class= ' box box-maingrey text-center' id='francais'> 
+						<br>
+						
+						<div class= 'box box-insidegrey text-center' > 
+							<h2 class='text-center Beginner'>  Beginner  </h2>
+						</div>
+						
+						<div class= 'box box-insidegrey text-center' > 
+								<h2 class='text-center Intermediate'>  Intermediate  </h2> 
+						</div> 
+						<br>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</body>
+</html>
+
+
+
+
+
+<script src="js/jquery.min.js"></script>
+<script>
+//
+$(document).ready(function(){
+});
+
+//onclick 'beginner'
+$('h2.Beginner').click(function(){
+ alert('Beginner for .click() called.')
+});
+//onclick 'intermediate'
+$('h2.Intermediate').click(function(){
+ alert('Intermediate for .click() called.')
+});

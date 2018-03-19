@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>mainmenu.html</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/frenes.css">
+		<style type="text/css">
+.playzone{
+background-image:url('images/BG2.jpg');
+}
+#loon{
+	background-image: url("images/airship.png");
+}
+		</style>
+	</head>
+	<body>
+		<div class='container'>
+			<div class='row'>	
+				<div class='col-xs-2 col-xs-offset-2 playzone'>
+					<div id='loon'>
+					</div>
+					<h1 class='text-center Beginner'>  Language Barrier Typing Game </h1>
+					<div class='text-center'>
+						<h4 id="cdown"></h4>
+					</div>	
+					<!-- main menu box -->
+					<div class= 'box box-maingrey text-center' id='main'>
+						<br>
+						<div class= ' box box-insidegrey text-center'> 
+							<h2 class='text-center French'>  French   </h2>
+						</div>
+						<div class= ' box box-insidegrey text-center'> 
+							<h2 class='text-center Spanish'>  Spanish  </h2>
+						</div> 
+							<div class= ' box box-insidegrey text-center'>
+								<h2 class='text-center English'>  English  </h2>
+							</div>
+						<br>
+						<button type="button" class='btn btn-warning glyphicon glyphicon-glass text-center' id='hall'> HALL OF FAME </button> 
+						<br><br>
+						<button type="button" class='btn btn-success glyphicon glyphicon-music' id='musicpause'></button>
+						<button type="button" class='btn btn-success glyphicon glyphicon-volume-off' id='musicplay'></button>
+						<!--
+							&nbsp
+						<button type="button" class='btn btn-success glyphicon glyphicon-volume-up' id='sfx'></button>
+						-->
+					</div>
+					<!-- difficulty box -->
+					<div class= ' box box-maingrey text-center' id='difficulty'> 
+						<h3>Choose difficulty</h3>
+						<br>
+						
+						<div class= 'box box-insidegrey text-center' > 
+							<h2 class='text-center Beginner'>  Beginner  </h2>
+						</div>
+						
+						<div class= 'box box-insidegrey text-center' > 
+								<h2 class='text-center Intermediate'>  Intermediate  </h2> 
+						</div> 
+						<br><br>
+						<button type="button" class='btn btn-danger btn-md text-center' id='retreat'> BACK </button> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+
+<!--ACCUSED OF SCRIPTING!!!-->
+
+
+<script src="js/jquery.min.js"></script>
+<script>
+var lang,diff,myAudio;
+
+$(document).ready(function(){
+	//hide yo kids hide yo wife
+	$("#difficulty").hide();
+	$("#musicplay").hide();
+	$("#loon").hide();
+//	turnOnMusic();
+});
+
+//onclick 'hall of fame'
+$("button#hall").on("click",function(){
+	 alert('Hall of Fame ');	 
+});
+//onclick 'music'
+$("button#musicpause").on("click",function(){
+	 	myAudio.pause();
+		$("button#musicpause").hide();
+	 	$("button#musicplay").show();
+});
+//onclick 'music'
+$("button#musicplay").on("click",function(){
+	 	turnOnMusic();
+	 	$("button#musicplay").hide();
+	 	$("button#musicpause").show();
+});
+//onclick 'french'
+$('h2.French').click(function(){
+     toggleDiff();
+     lang='french';
+     changeBG();
+});
+//onclick 'spanish'
+$('h2.Spanish').click(function(){
+     toggleDiff();
+     lang='spanish';
+     changeBG();
+});
+//onclick 'english'
+$('h2.English').click(function(){
+     toggleDiff();
+     lang='english';
+     changeBG();
+
+});
+//onclick 'back'
+$("button#retreat").click(function(){
+     alert('Retreat!!!');
+     toggleDiff();
+});
+//onclick 'beginner'
+$('h2.Beginner').click(function(){
+ 	thread=null;
+ 	$("#loon").show();
+ 	$("h1").hide();
+ 	$("div.box-maingrey").hide();
+	startGame();
+});
+//onclick 'intermediate'
+$('h2.Intermediate').click(function(){
+ alert('Intermediate')
+});
+
+function turnOnMusic(){
+	// SOUNDS 
+	myAudio = new Audio('sound/limits.wav'); 
+	myAudio.addEventListener('ended', function() {
+	    this.currentTime = 0;
+	    this.play();
+		//// use this ->  method to stop the sound  this.pause();
+	}, false);
+	 	myAudio.play();
+
+}
+function changeBG(){
+	$("div.playzone").css("background-image","url('images/BG"+lang+".jpg')");
+	//$("div.playzone").css("background-image","url('BGenglish.jpg')");
+}
+function toggleDiff(){
+     $("div#main").toggle("slow", function() {
+  });
+     $("div#difficulty").toggle("slow", function() {
+  });
+}
+var thread = null;
+
+function moveRight(){
+	if (thread!=null){return;}
+	thread = setInterval(function(){
+		$("#loon").css("left","+=5");
+		var myLeft = parseInt($("#loon").css("left"));
+		//console.log(myLeft);
+		if(myLeft >= 700){
+			clearInterval(thread);
+		}
+	},40);
+}
+
+function startGame(){
+	var cd=5;
+	$("h4#cdown").html(cd);
+	var cdthread = setInterval(function(){
+		
+		$("h4#cdown").html(cd);
+		if(cd <= 1){
+			clearInterval(cdthread);
+			moveRight();
+			$("h4#cdown").hide()
+		}else{
+			cd--;
+			$("h4#cdown").html(cd);
+		}
+		console.log(cd);
+	},1000);
+
+}
+
+
+
+</script>

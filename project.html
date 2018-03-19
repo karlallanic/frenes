@@ -1,0 +1,81 @@
+<html>
+<head>
+	<title>project.html</title>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<style type="text/css">
+
+.playzone{
+	background-image:url("BG.jpg");
+	background-repeat: no-repeat;
+	width: 486px;
+	height: 349px;
+	overflow: hidden;
+	margin-top:50px;
+	}
+#loon{
+	background-image: url("airship.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width:50%;
+	height:100px;
+	position: relative;
+	left:-300px;
+}
+</style>
+</head>
+<body>
+<div class='container'>
+	<div class='row'>
+		<div class='col-xs-4 col-xs-offset-4 playzone'>
+			<div id='loon'>
+			</div>
+			<div>
+				<center>
+				<button type="button" class="btn btn-primary playnow">Play now!</button>
+				</center>
+			</div>
+		</div>
+
+	</div>
+	<div >
+		<p class="area lead text-center"></p>
+	</div>
+	<div class="player">
+		<br>
+		<center><input type="text" id="playa">
+		<br><br>
+		<button type="button" class="btn btn-success">Enter</button>
+		</center>
+	</div>
+</div>
+</body>
+</html>
+<script src="js/jquery.min.js"></script>
+<script>
+	$("button.playnow").on("click",function(){
+	//clearInterval(thread);
+	thread=null;
+	$("button.playnow").hide();
+	moveRight();
+	$(".area").focus();
+
+	
+});
+	$("body ").on("keydown",function(event){
+
+		$(".area").append(event.key);
+	});
+
+var thread = null;
+function moveRight(){
+	if (thread!=null){return;}
+	thread = setInterval(function(){
+		$("#loon").css("left","+=5");
+		var myLeft = parseInt($("#loon").css("left"));
+		console.log(myLeft);
+		if(myLeft >= 700){
+			clearInterval(thread);
+		}
+	},40);
+}
+</script>
