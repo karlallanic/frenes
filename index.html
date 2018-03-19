@@ -38,8 +38,7 @@ background-image:url('images/BG2.jpg');
 						<br>
 						<button type="button" class='btn btn-warning glyphicon glyphicon-glass text-center' id='hall'> HALL OF FAME </button> 
 						<br><br>
-						<button type="button" class='btn btn-success glyphicon glyphicon-music' id='musicpause'></button>
-						<button type="button" class='btn btn-success glyphicon glyphicon-volume-off' id='musicplay'></button>
+						
 						<!--
 							&nbsp
 						<button type="button" class='btn btn-success glyphicon glyphicon-volume-up' id='sfx'></button>
@@ -60,9 +59,19 @@ background-image:url('images/BG2.jpg');
 						<br><br>
 						<button type="button" class='btn btn-danger btn-md text-center' id='retreat'> BACK </button> 
 					</div>
+					
+				</div>
+				<div class='row'>
+					<button type="button" class='btn btn-success glyphicon glyphicon-music sound' id='musicpause'></button>
+					<button type="button" class='btn btn-success glyphicon glyphicon-volume-off sound' id='musicplay'></button>
+				</div>
+				<div class='ro text-center'>
+					<input type="text" id="wordIN">
 				</div>
 			</div>
+				
 		</div>
+
 	</body>
 </html>
 
@@ -78,8 +87,9 @@ $(document).ready(function(){
 	//hide yo kids hide yo wife
 	$("#difficulty").hide();
 	$("#musicplay").hide();
+	$("#loon").html("Bonjour!");
 	$("#loon").hide();
-//	turnOnMusic();
+	turnOnMusic();
 });
 
 //onclick 'hall of fame'
@@ -125,19 +135,20 @@ $("button#retreat").click(function(){
 //onclick 'beginner'
 $('h2.Beginner').click(function(){
  	thread=null;
- 	$("#loon").show();
  	$("h1").hide();
  	$("div.box-maingrey").hide();
 	startGame();
 });
 //onclick 'intermediate'
 $('h2.Intermediate').click(function(){
- alert('Intermediate')
+	$("h1").hide();
+ 	$("div.box-maingrey").hide();
+	startGame();
 });
 
 function turnOnMusic(){
 	// SOUNDS 
-	myAudio = new Audio('sound/limits.wav'); 
+	myAudio = new Audio('sound/limits.mp3'); 
 	myAudio.addEventListener('ended', function() {
 	    this.currentTime = 0;
 	    this.play();
@@ -146,10 +157,11 @@ function turnOnMusic(){
 	 	myAudio.play();
 
 }
+
 function changeBG(){
 	$("div.playzone").css("background-image","url('images/BG"+lang+".jpg')");
-	//$("div.playzone").css("background-image","url('BGenglish.jpg')");
 }
+
 function toggleDiff(){
      $("div#main").toggle("slow", function() {
   });
@@ -164,27 +176,31 @@ function moveRight(){
 		$("#loon").css("left","+=5");
 		var myLeft = parseInt($("#loon").css("left"));
 		//console.log(myLeft);
-		if(myLeft >= 700){
+		if(myLeft >= 1000){
 			clearInterval(thread);
 		}
 	},40);
 }
 
 function startGame(){
+
 	var cd=5;
 	$("h4#cdown").html(cd);
+	
+	//start countdown...
 	var cdthread = setInterval(function(){
 		
 		$("h4#cdown").html(cd);
 		if(cd <= 1){
 			clearInterval(cdthread);
+			$("#loon").html("Bonjour!");
+			$("#loon").show();
 			moveRight();
 			$("h4#cdown").hide()
 		}else{
 			cd--;
 			$("h4#cdown").html(cd);
 		}
-		console.log(cd);
 	},1000);
 
 }
