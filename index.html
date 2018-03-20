@@ -62,8 +62,8 @@ background-image:url('images/BG2.jpg');
 					
 				</div>
 				<div class='row'>
-					<button type="button" class='btn btn-success glyphicon glyphicon-music sound' id='musicpause'></button>
-					<button type="button" class='btn btn-success glyphicon glyphicon-volume-off sound' id='musicplay'></button>
+					<button type="button" class='btn btn-success glyphicon glyphicon-volume-off sound' id='musicpause'></button>
+					<button type="button" class='btn btn-success glyphicon glyphicon-music sound' id='musicplay'></button>
 				</div>
 				<div class='ro text-center'>
 					<input type="text" id="wordIN">
@@ -82,14 +82,16 @@ background-image:url('images/BG2.jpg');
 <script src="js/jquery.min.js"></script>
 <script>
 var lang,diff,myAudio;
+var displayedWords;
+var userWordInput;
 
 $(document).ready(function(){
 	//hide yo kids hide yo wife
 	$("#difficulty").hide();
 	$("#musicplay").hide();
-	$("#loon").html("Bonjour!");
+	$("#loon").html("Bonjour");
 	$("#loon").hide();
-	turnOnMusic();
+//	turnOnMusic();
 });
 
 //onclick 'hall of fame'
@@ -129,7 +131,6 @@ $('h2.English').click(function(){
 });
 //onclick 'back'
 $("button#retreat").click(function(){
-     alert('Retreat!!!');
      toggleDiff();
 });
 //onclick 'beginner'
@@ -145,6 +146,21 @@ $('h2.Intermediate').click(function(){
  	$("div.box-maingrey").hide();
 	startGame();
 });
+
+$("#wordIN").on("keydown",function(e){
+
+		if(e.which == 13) {
+        	userWordInput=$("#wordIN").val();
+        	if(userWordInput=='hello'){
+        		$("#loon").toggle("slow", function() {
+  				});
+
+        	}
+
+        	$("#wordIN").val("");
+    	}
+	});
+
 
 function turnOnMusic(){
 	// SOUNDS 
@@ -204,7 +220,9 @@ function startGame(){
 	},1000);
 
 }
+function check(){
 
+}
 
 
 </script>
