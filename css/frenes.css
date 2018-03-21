@@ -69,13 +69,47 @@ h4{
 	font-size: 200px;
 	text-shadow: 3px 3px rgba(185,185,185,.7);
 }
-h1,h2,h3,h4{
-	-webkit-user-select: none; /* Safari */        
-	-moz-user-select: none; /* Firefox */
-	-ms-user-select: none; /* IE10+/Edge */
-	user-select: none; /* Standard */
+h5{
+	color:rgb(255,255,255);
+	font-size: 35px;
+	text-shadow: 3px 3px rgb(0,0,0);
 }
-
+h1,h2,h3,h4{
+	-webkit-user-select: none;      
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+#timerdiv{
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+}
 .sound{
 	margin-left: 90%;
+}
+#loon2{
+
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width:37%;
+	height:100px;
+	position: relative;
+	left:-300px;
+	padding-top: 28px;
+	padding-left: 23px; 
+	font-size: 18px;
+}
+#loon3{
+
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width:37%;
+	height:100px;
+	position: relative;
+	left:-300px;
+	padding-top: 28px;
+	padding-left: 23px; 
+	font-size: 18px;
+	z-index: 2
 }

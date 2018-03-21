@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 	<head>
 		<title>mainmenu.html</title>
@@ -8,7 +7,7 @@
 .playzone{
 background-image:url('images/BG2.jpg');
 }
-#loon{
+.loons{
 	background-image: url("images/airship.png");
 }
 		</style>
@@ -17,8 +16,7 @@ background-image:url('images/BG2.jpg');
 		<div class='container'>
 			<div class='row'>	
 				<div class='col-xs-2 col-xs-offset-2 playzone'>
-					<div id='loon'>
-					</div>
+					<div class='loons' id='loon'></div>
 					<h1 class='text-center Beginner'>  Language Barrier Typing Game </h1>
 					<div class='text-center'>
 						<h4 id="cdown"></h4>
@@ -36,7 +34,7 @@ background-image:url('images/BG2.jpg');
 								<h2 class='text-center English'>  English  </h2>
 							</div>
 						<br>
-						<button type="button" class='btn btn-warning glyphicon glyphicon-glass text-center' id='hall'> HALL OF FAME </button> 
+						<button type="button" class='btn btn-warning glyphicon glyphicon-glass text-center' id='hall'> HALL OF FAME</button> 
 						<br><br>
 						
 						<!--
@@ -59,7 +57,10 @@ background-image:url('images/BG2.jpg');
 						<br><br>
 						<button type="button" class='btn btn-danger btn-md text-center' id='retreat'> BACK </button> 
 					</div>
-					
+
+					<div class='text-center' id='timerdiv'>
+					<h5 id="gameTime"></h5>
+					</div>
 				</div>
 				<div class='row'>
 					<button type="button" class='btn btn-success glyphicon glyphicon-volume-off sound' id='musicpause'></button>
@@ -81,7 +82,7 @@ background-image:url('images/BG2.jpg');
 
 <script src="js/jquery.min.js"></script>
 <script>
-var lang,diff,myAudio;
+var lang,diff,myAudio,diffSpeed;
 var displayedWords;
 var userWordInput;
 
@@ -91,12 +92,14 @@ $(document).ready(function(){
 	$("#musicplay").hide();
 	$("#loon").html("Bonjour");
 	$("#loon").hide();
+
 //	turnOnMusic();
 });
 
 //onclick 'hall of fame'
 $("button#hall").on("click",function(){
-	 alert('Hall of Fame ');	 
+
+	 
 });
 //onclick 'music'
 $("button#musicpause").on("click",function(){
@@ -138,12 +141,16 @@ $('h2.Beginner').click(function(){
  	thread=null;
  	$("h1").hide();
  	$("div.box-maingrey").hide();
+ 	diffSpeed=40;
+ 	diff='beginner';
 	startGame();
 });
 //onclick 'intermediate'
 $('h2.Intermediate').click(function(){
 	$("h1").hide();
  	$("div.box-maingrey").hide();
+ 	diffSpeed=1;
+ 	diff='intermediate';
 	startGame();
 });
 
@@ -152,11 +159,11 @@ $("#wordIN").on("keydown",function(e){
 		if(e.which == 13) {
         	userWordInput=$("#wordIN").val();
         	if(userWordInput=='hello'){
-        		$("#loon").toggle("slow", function() {
-  				});
-
+        		$("#loon").toggle("slow");
+        		thread = setTimeout(function(){
+        			$("#loon").remove();
+        		},1000);    		
         	}
-
         	$("#wordIN").val("");
     	}
 	});
@@ -185,22 +192,43 @@ function toggleDiff(){
   });
 }
 var thread = null;
-
+var threadGame= null;
 function moveRight(){
 	if (thread!=null){return;}
 	thread = setInterval(function(){
-		$("#loon").css("left","+=5");
+		$(".loons").css("left","+=5");
 		var myLeft = parseInt($("#loon").css("left"));
 		//console.log(myLeft);
 		if(myLeft >= 1000){
 			clearInterval(thread);
 		}
-	},40);
+	},diffSpeed);
 }
 
-function startGame(){
+function gameTimerfunc	(){
 
-	var cd=5;
+	var gtr=10
+	$("#gameTime").html(gtr);
+	
+	//start countdown...
+	var gameTimer = setInterval(function(){
+		
+		$("#gameTime").html(gtr);
+		if(gtr <=0){
+			clearInterval(gameTimer);
+			alert('GAME OVER!');
+		}else{
+			gtr--;
+			$("#gameTime").html(gtr);
+		}
+	},1000);
+
+}
+function check(){
+
+}
+function startGame(){
+	var cd=2;
 	$("h4#cdown").html(cd);
 	
 	//start countdown...
@@ -213,16 +241,15 @@ function startGame(){
 			$("#loon").show();
 			moveRight();
 			$("h4#cdown").hide()
+			gameTimerfunc(); 
+			shipGenerator();
 		}else{
 			cd--;
 			$("h4#cdown").html(cd);
 		}
 	},1000);
-
 }
-function check(){
-
+function shipGenerator(){
+$( "<div class='loons' id='loon2'>Regarde</div>" ).insertAfter( "#loon" );
 }
-
-
 </script>
