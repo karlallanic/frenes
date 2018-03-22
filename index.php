@@ -274,22 +274,18 @@ $( "<div class='loons' id='loon2'>Regarde</div>" ).insertAfter( "#loon" );
 
 
 
-
+$(document).ready(function(){
 $(function(){
 
 
 	jQuery.ajax({
                 type: "POST",
-                data:  $("form#a").serialize(),
+                data:  $(""),
 
                 success: function(data){
-                    jQuery(".res").html(data);
-
                     $('#test').html(data);
-
-
                 }
             });
 });
-  
+ });
 </script>

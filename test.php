@@ -21,7 +21,7 @@ $(document).ready(function(){
   $(function(){
     jQuery.ajax({
       type: "POST",
-      data:  ,
+      data:  data,
 
       success: function(data){
           allwords=data;
