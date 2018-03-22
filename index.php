@@ -1,3 +1,18 @@
+
+<?php
+
+$connect = mysqli_connect("localhost","root","");
+
+		mysqli_select_db($connect,"langzeppelin") or die("Database does not exist");
+		$userquery = mysqli_query($connect,"SELECT * FROM words ORDER BY RAND()");
+		$data = array();
+   		while($row = mysqli_fetch_assoc($userquery)) {
+			$array[]=$row;
+		}
+		$connect->close();
+?>
+
+
 <html>
 	<head>
 		<title>mainmenu.html</title>
@@ -5,7 +20,7 @@
 		<link rel="stylesheet" type="text/css" href="css/frenes.css">
 		<style type="text/css">
 .playzone{
-background-image:url('images/BG2.jpg');
+	background-image:url('images/BG2.jpg');
 }
 .loons{
 	background-image: url("images/airship.png");
@@ -252,4 +267,29 @@ function startGame(){
 function shipGenerator(){
 $( "<div class='loons' id='loon2'>Regarde</div>" ).insertAfter( "#loon" );
 }
+
+
+//lol ajax i dead
+
+
+
+
+
+$(function(){
+
+
+	jQuery.ajax({
+                type: "POST",
+                data:  $("form#a").serialize(),
+
+                success: function(data){
+                    jQuery(".res").html(data);
+
+                    $('#test').html(data);
+
+
+                }
+            });
+});
+  
 </script>
