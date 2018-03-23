@@ -52,3 +52,10 @@ background-color:lightcoral;
 font-size: 250%;
 border:2px double;
 }
+.tablelink:hover{
+	cursor:pointer;
+	background-color: rgb(120,120,120);
+}
+td{
+	font-color:white;
+}
