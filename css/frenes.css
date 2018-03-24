@@ -59,7 +59,7 @@ border:2px double;
 	background-size: 70%;
 	width:37%;
 	height:70px;
-	position: relative;
+	position: absolute;
 	left:-300px;
 	padding-top: 20px;
 	padding-left: 18px; 

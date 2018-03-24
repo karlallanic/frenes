@@ -90,7 +90,8 @@
 
 					<button type="button" class='btn btn-success glyphicon glyphicon-volume-off sound' id='musicpause'></button>
 					<button type="button" class='btn btn-success glyphicon glyphicon-music sound' id='musicplay'></button>
-					<button type="button" class='btn btn-danger btn-md text-center' id='retreat'> BACK </button> 
+					<button type="button" class='btn btn-danger btn-md text-center' id='retreatfromdiff'> BACK </button> 
+					<button type="button" class='btn btn-danger btn-md text-center' id='retreatfromhof'> BACK </button> 
 				</div>
 				<div class='ro text-center'>
 					<input type="text" id="wordIN">
@@ -108,17 +109,22 @@
 
 <script src="js/jquery.min.js"></script>
 <script>
-var lang,diff,myAudio,diffSpeed,userWordInput,i,score=0,wid2;
+var diff,myAudio,diffSpeed,userWordInput,i,score=0,wid2;
 var usedWords = [];
-var thread = null;
+var thread = [2,16,3];
 var gtr =null;
 var alldata=[];
 var halloffamedata = [];
 var currentShips= [];
+var lang=null;
+var wordChecker = 0;
+var randIndex,topmarg,randWord;
+var wordGenerated = 0;
 $(document).ready(function(){
 	//hide yo kids hide yo wife
 	runAjax();
-	$("#retreat").hide();
+	$("#retreatfromdiff").hide();
+	$("#retreatfromhof").hide();
 	$("#difficulty").hide();
 	$("#musicplay").hide();
 	$("#wordIN").hide();
@@ -133,21 +139,19 @@ $(document).ready(function(){
 $("button#hall").on("click",function(){
 	$("#maindiv").hide();
 	$("#tablediv").show();
-	$("#retreat").show();
+	$("#retreatfromhof").show();
 });
 //onclick 'music'
 $("button#musicpause").on("click",function(){
 	myAudio.pause();
 	$("button#musicpause").hide();
 	$("button#musicplay").show();
-	$("#retreat").show();
 });
 //onclick 'music'
 $("button#musicplay").on("click",function(){
-	 turnOnMusic();
+	 turnOnMusic(lang);
 	 $("button#musicplay").hide();
 	 $("button#musicpause").show();
-	 $("#retreat").show();
 });
 //onclick 'french'
 $('div.French').click(function(){
@@ -156,7 +160,7 @@ $('div.French').click(function(){
 	myAudio.pause();
 	turnOnMusic(lang);
 	changeBG();
-	$("#retreat").show();
+	$("#retreatfromdiff").show();
 });
 //onclick 'spanish'
 $('div.Spanish').click(function(){
@@ -165,7 +169,7 @@ $('div.Spanish').click(function(){
     myAudio.pause();
 	turnOnMusic(lang);
     changeBG();
-    $("#retreat").show();
+    $("#retreatfromdiff").show();
 });
 //onclick 'english'
 $('div.English').click(function(){
@@ -174,36 +178,48 @@ $('div.English').click(function(){
     myAudio.pause();
 	turnOnMusic(lang);
     changeBG();
-    $("#retreat").show();
+    $("#retreatfromdiff").show();
 
 });
 //onclick 'back'
-$("button#retreat").click(function(){
-    toggleDiff();
+$("button#retreatfromdiff").click(function(){
+    $("#main").show(500);
+	$("#difficulty").hide(500);
+	$("#retreatfromdiff").hide();
+});
+//onclick 'sexyback'
+$("button#retreatfromhof").click(function(){
     $("#maindiv").show();
 	$("#tablediv").hide();
+	$("#retreatfromhof").hide();
 });
 //onclick 'beginner'
 $('div.Beginner').click(function(){
- 	thread=null;
  	$("h1").hide();
  	$("div.box-maingrey").hide();
- 	diffSpeed=100;
+ 	diffSpeed=50;
  	diff='beginner';
-	startGame();
+ 	difficulty=1;
+	startCountdown();
 });
 //onclick 'intermediate'
 $('div.Intermediate').click(function(){
 	$("h1").hide();
  	$("div.box-maingrey").hide();
- 	diffSpeed=19;
+ 	diffSpeed=37;
  	diff='intermediate';
-	startGame();
+ 	difficulty=2;
+	startCountdown();
 });
 // SOUNDS 
 function turnOnMusic(lang){
 	
-	myAudio = new Audio('sound/'+lang+'.mp3'); 
+	if(lang==null){
+		myAudio = new Audio('sound/default.mp3');
+	}
+	else{
+		myAudio = new Audio('sound/'+lang+'.mp3'); 
+	}
 	myAudio.addEventListener('ended', function() {
 	    this.currentTime = 0;
 	    this.play();
@@ -250,9 +266,7 @@ function gameTimerfunc(){
 
 
 //GAMEU STARTOO!!!
-var stopme;
-var shipNo=0;
-function startGame(){
+function startCountdown(){
 	var cd=5;
 	$("h4#cdown").html(cd);
 	$("#wordIN").show();
@@ -261,28 +275,7 @@ function startGame(){
 		$("h4#cdown").html(cd);
 		if(cd <= 1){
 			clearInterval(cdthread);
-
-			stopme = shipGenerator(lang);
-			shipNo++;
-			usedWords.push(stopme);
-			var threadShipSail = null;
-			var randTime = Math.floor((Math.random()*1200)+1000)
-			$("#scoreH").html(score);
-			threadShipSail = setInterval(function(){
-			if(gtr <=0){
-				clearInterval(threadShipSail);
-			}else{
-				stopme = shipGenerator(lang);
-				shipNo++;
-				usedWords.push(stopme);
-				// stopperthread = setTimeout(function(){
-				// 	$("#loon"+stopme).remove();
-				// 	//console.log(stopme);
-				// },5000);
-			}
-			},randTime);
-			
-			$("h4#cdown").hide()
+			startGame();
 			gameTimerfunc();
 		}else{
 			cd--;
@@ -290,35 +283,75 @@ function startGame(){
 		}
 	},1000);
 }
+
+function startGame(){
+	shipGenerator(lang);
+	var threadShipSail = null;
+	var randTime = Math.floor((Math.random()*1500)+1250)
+	$("#scoreH").html(score);
+
+	threadShipSail = setInterval(function(){
+	if(gtr <=0){
+		clearInterval(threadShipSail);
+	}else{
+		wordChecker = 0;
+		
+		do{
+			shipGenerator(lang);
+		}while(wordGenerated=0);
+		
+	}
+	wordGenerated = 0;
+
+	},randTime);
+	$("h4#cdown").hide()
+}
+var adIndex=0;
+
 function shipGenerator(lang){
 
-	var randIndex = Math.floor((Math.random()*4)+1);
-	var randWord = Math.floor((Math.random()*(alldata.length-1))+1);
-	var rzi = Math.floor((Math.random()*200)+1);
-	wid = "loon"+alldata[randWord].word_ID;
-	wid2 = alldata[randWord].word_ID;
-	if (lang=='french') {
-		$("#lane"+randIndex).prepend('<div class="loons col-xs-1" id="'+wid+'" style="z-index:'+rzi+';">'+alldata[randWord].french+'</div>');
+	randIndex = Math.floor((Math.random()*4)+1);
+	topmarg = (Math.floor((Math.random()*5)+1))*70;
+	wid = "loon"+alldata[adIndex].word_ID;
+	wid2 = alldata[adIndex].word_ID;
+
+	for(var xx=0;xx<usedWords.length;xx++){
+		if(wid2==usedWords[xx]){
+			wordChecker++;
+			wordGenerated = 0;
+
+		}
 	}
-	if (lang=='spanish') {
-		$("#lane"+randIndex).prepend("<div class='loons col-xs-1' id='"+wid+"' style='z-index:"+rzi+";'>"+alldata[randWord].spanish+"</div>");
-	}
-		if (lang=='english') {
-	$("#lane"+randIndex).prepend("<div class='loons col-xs-1' id='"+wid+"' style='z-index:"+rzi+";'>"+alldata[randWord].english+"</div>");
-	}
-	moveRight(wid2);
-	return wid2;
+	if(wordChecker==0){
+		console.log("wordChecker=0");
+			
+			if (lang=='french'){
+				$("#lane"+randIndex).prepend('<div class="loons col-xs-1" id="'+wid+'" style="margin-top:'+topmarg+';">'+alldata[adIndex].french+'</div>');
+			}
+			if (lang=='spanish') {
+				$("#lane"+randIndex).prepend("<div class='loons col-xs-1' id='"+wid+"' style='margin-top:"+topmarg+";'>"+alldata[adIndex].spanish+"</div>");
+			}
+			if (lang=='english') {
+				$("#lane"+randIndex).prepend("<div class='loons col-xs-1' id='"+wid+"' style='margin-top:"+topmarg+";'>"+alldata[adIndex].english+"</div>");
+			}
+			moveRight(wid,adIndex);
+			usedWords.push(wid2);
+			wordGenerated = 1;
+
+	}	
+	adIndex++;
+	return wordGenerated;
 }
 
-function moveRight(lid){
-	thread=null;
-	if (thread!=null){return;}
-	thread = setInterval(function(){
-		$("#loon"+lid).css("left","+=5");
-		var myLeft = parseInt($("#loon"+lid).css("left"));
-		if(myLeft >= 1000){
-			clearInterval(thread);
-			$("#loon"+lid).remove();
+
+function moveRight(lid,adIndex){
+	thread[adIndex]=null;
+	thread[adIndex] = setInterval(function(){
+		$("#"+lid).css("left","+=5");
+		var myLeft = parseInt($("#"+lid).css("left"));
+		if(myLeft >= 400){
+			clearInterval(thread[adIndex]);
+			$("#"+lid).remove();
 		}
 	},diffSpeed);
 }
@@ -332,7 +365,9 @@ function moveRight(lid){
 // }
 
 //ON PRESS ENTER
+var threader= null;
 $("#wordIN").on("keydown",function(e){
+
 		var b;
 		if(e.which == 13) {
         	userWordInput=$("#wordIN").val();
@@ -341,16 +376,22 @@ $("#wordIN").on("keydown",function(e){
 	        	for(x=0;x<=alldata.length-1;x++){
 	        		if(alldata[x]['english']==userWordInput){
         				for(b=0;b<usedWords.length;b++){
-        					if(usedWords[b]==alldata[x]['word_ID']){
-			        			score+=10;
-		        				$('#scoreH').html(score);
-		        				 $("#loon"+usedWords[b]).toggle("slow");
-		        				 console.log("toggle worked");
-			        			thread = setTimeout(function(){
-			        				console.log("remove worked");
-			        				$("#loon"+usedWords[b]).remove();
-			        				usedWords[b]=null;
-			        			},1000);
+        					if(usedWords[b]!=null){
+        						console.log(alldata[x]);
+	        					if(usedWords[b]==alldata[x]['word_ID']){
+				        			score+=(10*difficulty);
+			        				$('#scoreH').html(score);
+			        				$("#loon"+usedWords[b]).toggle("slow");
+				        			threader = setTimeout(function(){
+				        				console.log("remove worked");
+				        				console.log(usedWords);
+				        				console.log("used words: "+usedWords[b]);
+				        				$("#loon"+usedWords[b]).remove();
+				        				usedWords[b]=null;
+				        				console.log("after null: "+usedWords[b]);
+				        				alldata[x]=null;
+				        			},1000);
+		        				}
 		        			}
 	        			}
 	        		}
@@ -364,7 +405,7 @@ $("#wordIN").on("keydown",function(e){
         				for(b=0;b<usedWords.length;b++){
         					console.log("forloop");
         					if(usedWords[b]==alldata[y]['word_ID']){
-			        			score+=10;
+			        			score+=(10*difficulty);
 		        				$('#scoreH').html(score);
 		        				 $("#loon"+usedWords[b]).toggle("slow");
 		        				 console.log("toggle worked");
